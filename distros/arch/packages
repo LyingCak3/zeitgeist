@@ -4,6 +4,9 @@ hypridle
 hyprpaper
 hyprlock
 
+# infrastructure
+python
+
 # theming packages
 waybar
 rofi-wayland
