@@ -3,10 +3,17 @@ hyprland
 hypridle
 hyprpaper
 hyprlock
+hyprland-protocols
+hyprpolkitagent
 
 # infrastructure
 python
 
+# utils
+systemsettings
+
 # theming packages
 waybar
 rofi-wayland
+otf-font-awesome
+nerd-fonts
