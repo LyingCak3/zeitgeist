@@ -51,7 +51,7 @@ if __name__ == "__main__":
         default=os.path.join(os.environ["HOME"], ".local/share/wallpapers/zietgeist"),
         help="Directory to search for wallpapers")
     parser.add_argument("-r", "--rotate", type=int, default=600, help="How often, in seconds, to rotate the wallpaper")
-    parser.add_argument("--file-types", dest="file_types", default=[".png", ".jpg", ".jpeg"], nargs="+", 
+    parser.add_argument("--file-types", dest="file_types", default=[".png", ".jpg", ".jpeg", ".webp"], nargs="+", 
         help="Filetypes to support.")
     parser.add_argument("-m", "--monitors", default=["all"], dest="monitors", nargs="+",
         help="Monitors to change wallpaper for, set to \"all\" (default) to handle all monitors")
@@ -65,24 +65,31 @@ if __name__ == "__main__":
         monitors = [x["name"] for x in json.loads(
             sp.run(["hyprctl", "monitors", "-j"], capture_output=True, text=True).stdout
         )]
-        print(monitors)
 
     try:
         while (True):
 
             time.sleep( args.rotate )
 
-            for monitor in monitors:
+            keys_to_delete = [ k for k in wallpapers.keys() ]
+            for k in keys_to_delete:
+                if not os.path.exists(k):
+                    print(k)
+                    wallpapers.pop(k, None)
 
-                for root, dir, file in os.walk( args.dir ):
+            for root, dir, file in os.walk( args.dir ):
                     for f in file:
                         full_path = os.path.join(root, f)
                         if full_path not in wallpapers.keys() and os.path.splitext(f)[1] in args.file_types:
                             wallpapers[full_path] = 1.0
+                        
+
+            for monitor in monitors:
 
                 wallpaper_list = []
                 wallpaper_weights = []
                 for k, v in wallpapers.items():
+                    
                     wallpaper_list.append(k)
                     wallpaper_weights.append(v)
 
