@@ -83,7 +83,7 @@ if __name__ == "__main__":
                         if full_path not in wallpapers.keys() and os.path.splitext(f)[1] in args.file_types:
                             wallpapers[full_path] = 1.0
                         
-
+            sp.run(["hyprctl", "hyprpaper", "unload", "all"], check=True)
             for monitor in monitors:
 
                 wallpaper_list = []
@@ -95,8 +95,7 @@ if __name__ == "__main__":
 
                 selected_wallpaper = random.choices(wallpaper_list, weights=wallpaper_weights, k=1)[0]
                 print("Selected wallpaper {}".format(selected_wallpaper))
-                try:
-                    sp.run(["hyprctl", "hyprpaper", "unload", "all"], check=True)
+                try: 
                     sp.run(["hyprctl", "hyprpaper", "preload", selected_wallpaper])
                     sp.run(["hyprctl", "hyprpaper", "wallpaper", "{}, {}".format(monitor, selected_wallpaper)])
                 except sp.CalledProcessError as e:
